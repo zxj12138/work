@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <td>编号</td>
+                <td>姓名</td>
+                <td>类型</td>
+            </tr>6
+        </thead>
+        <tbody id="tbody">
+           
+        </tbody>
+    </table>
+    <script src="http://localhost:3000/js/jquery.min.js"></script>
+<!-- 删除 -->
+    <script>
+        function load(){
+            $.ajax({
+                type:"get",
+                url :"/admin/get_list",
+                success:function(d){
+                    $("#tbody").empty();
+                    for(var i in d){
+                        $("#tbody").append(`
+                        <tr>
+                            <td>${d[i].userid}</td>
+                            <td>${d[i].name}</td>
+                            <td>${d[i].usertype}</td>
+                            <td>
+                                <button class="del" data-userid=${d[i].userid}>删除</button>
+                            </td>
+                        </tr>    
+                    `)
+                }
+            }
+        })
+    }
+    load();
+                
+    $("#tbody").delegate(".del","click",function(){
+        $.ajax({
+            type:"post",
+            url :"/admin/takedata",
+            data:{"userid":$(this).data("userid")},
+            success:function(data){
+                if(data.abc== 1){
+                    alert("delete finish");
+                    load();
+                }
+            }
+        })
+    })
+    </script>
+</body>
+</html>
