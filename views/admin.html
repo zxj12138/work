@@ -7,20 +7,21 @@
     <title>admin</title>
 </head>
 <body>
+    <input type="button" id="add_button" value="新增">
     <table>
         <thead>
             <tr>
                 <td>编号</td>
                 <td>姓名</td>
                 <td>类型</td>
-            </tr>6
+            </tr>
         </thead>
         <tbody id="tbody">
            
         </tbody>
     </table>
+
     <script src="http://localhost:3000/js/jquery.min.js"></script>
-<!-- 删除 -->
     <script>
         function load(){
             $.ajax({
@@ -36,6 +37,7 @@
                             <td>${d[i].usertype}</td>
                             <td>
                                 <button class="del" data-userid=${d[i].userid}>删除</button>
+                                <button class="upd" data-userid=${d[i].userid}>修改</button>
                             </td>
                         </tr>    
                     `)
@@ -44,7 +46,7 @@
         })
     }
     load();
-                
+//删除          
     $("#tbody").delegate(".del","click",function(){
         $.ajax({
             type:"post",
@@ -58,6 +60,21 @@
             }
         })
     })
+    $("#tbody").delegate(".upd","click",function(){
+        $.ajax({
+            type:"post",
+            url :"/admin/update",
+            data:{"userid":$(this).data("userid")},
+            success:function(data){
+                if(data.cba== 1){
+                    alert("change finish");
+                    load();
+                }
+            }
+        })
+    })
     </script>
+    <script src= "/routes/consolectr.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 </html>
